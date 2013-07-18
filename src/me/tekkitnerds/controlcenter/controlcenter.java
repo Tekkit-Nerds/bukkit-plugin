@@ -1,8 +1,12 @@
 package me.tekkitnerds.controlcenter;
 
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class controlcenter extends JavaPlugin {
@@ -43,6 +47,19 @@ public class controlcenter extends JavaPlugin {
                 } else {
                     return false;
                 }
+            } else {
+
+                ItemStack buch = new ItemStack(Material.WRITTEN_BOOK, 1);
+                BookMeta meta = (BookMeta) buch.getItemMeta();
+                meta.setAuthor("Tekkit-Nerds-Verwaltung");
+                meta.setTitle("Die Grundregeln");
+                meta.addPage("Die erste Seite\n glaub ich zumindest");
+                meta.addPage("Die zweite seitäääß?");
+                buch.setItemMeta(meta);
+                Player p = (Player)sender;
+                p.getInventory().addItem(buch);
+                p.sendMessage("Da hast dein Buch");
+
             }
         }
         return erfolg;
