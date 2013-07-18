@@ -4,6 +4,7 @@ import me.tekkitnerds.controlcenter.database;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 
 public class main extends me.tekkitnerds.controlcenter.abst_modul {
 
@@ -11,6 +12,11 @@ public class main extends me.tekkitnerds.controlcenter.abst_modul {
 
     public main(database db) {
         this.db = db;
+    }
+
+    @EventHandler
+    public void onPlayerJoin() {
+        
     }
 
     @Override
