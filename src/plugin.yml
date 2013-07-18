@@ -4,6 +4,6 @@ main: me.tekkitnerds.controlcenter.controlcenter
 author: Niklas Kamenisch & Aaron Braun
 website: tekkit-nerds.net
 commands:
-     status:
-          description: Zeigt das Leben des Spielers
+     cc:
+          description: Befehle für unser Plugin
           usage: /<command>
