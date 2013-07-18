@@ -1,0 +1,9 @@
+name: controlcenter
+version: 0.1
+main: me.tekkitnerds.controlcenter.controlcenter
+author: Niklas Kamenisch & Aaron Braun
+website: tekkit-nerds.net
+commands:
+     status:
+          description: Zeigt das Leben des Spielers
+          usage: /<command>
