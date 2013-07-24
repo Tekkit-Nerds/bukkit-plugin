@@ -1,12 +1,34 @@
 package me.tekkitnerds.controlcenter;
 
-public class database {
-    private boolean isConnected = false;
+import java.io.File;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-    public database(String host, String user, String passwort, String database) {
+public class database {
+
+    private Connection conn;
+    private boolean isConnected = false;
+    private String DRIVER = "com.mysql.jdbc.Driver";
+    private String JAVA_IO_TMPDIR = "java.io.tmpdir";
+    private String host, user, passwort, database;
+    private int port;
+
+    public database(String host, int port, String user, String passwort, String database) {
+        this.host = host;
+        this.port = port;
+        this.user = user;
+        this.passwort = passwort;
+        this.database = database;
         this.connect();
     }
-    
+
     // Prüft ob die verbindung vorhanden ist, sonnst wird eine neue Verbindung herstellt. Wenn erfolgreich dann true
     public boolean isConnected() {
         if (!this.isConnected) {
@@ -20,10 +42,34 @@ public class database {
     }
 
     private void connect() {
-        this.isConnected = true;
+        this.isConnected = false;
+        File ourAppDir = new File(System.getProperty(JAVA_IO_TMPDIR));
+        File databaseDir = new File(ourAppDir, "mysql-mxj");
+        try {
+            Class.forName(DRIVER);
+            String url = "jdbc:mysql://" + this.host + ":" + this.port + "/" + this.database;
+            conn = DriverManager.getConnection(url, this.user, this.passwort);
+            this.isConnected = true;
+        } catch (Exception e) {
+            this.isConnected = false;
+        }
     }
 
     private void disconnect() {
-        this.isConnected = false;
+        try {
+            this.isConnected = false;
+            conn.close();
+        } catch (SQLException ex) {
+        }
+    }
+
+    public ResultSet Query(String SQLquery) {
+        try {
+            Statement stmt = conn.createStatement();
+            return stmt.executeQuery(SQLquery);
+        } catch (SQLException ex) {
+            Logger.getLogger(database.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
     }
 }

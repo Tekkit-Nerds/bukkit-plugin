@@ -7,3 +7,6 @@ commands:
      cc:
           description: Befehle für unser Plugin
           usage: /<command>
+     regelbuch:
+          description: Unser Regelbuch
+          usage: /<command>
