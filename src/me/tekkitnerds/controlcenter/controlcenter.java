@@ -1,52 +1,57 @@
 package me.tekkitnerds.controlcenter;
+//@author niklas
+import me.tekkitnerds.controlcenter.benutzer.Benutzer;
+import me.tekkitnerds.controlcenter.listener.JoinListener;
+import java.util.HashMap;
+import java.util.Map;
+import me.tekkitnerds.controlcenter.benutzer.BenutzerCommand;
+import me.tekkitnerds.controlcenter.gebiet.Gebiet;
+import me.tekkitnerds.controlcenter.regelbuch.RegelbuchCommand;
+import me.tekkitnerds.controlcenter.gebiet.GebietCommand;
+import me.tekkitnerds.controlcenter.listener.PlayerMoveListener;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.java.JavaPlugin;
 
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.event.EventHandler;
+public class controlcenter extends JavaPlugin {
 
-public class controlcenter extends abst_constolcenter {
-
-    protected abst_modul modBeruf, modGebiet, modMinecart, modQuest, modShop, modMessenger;
-    
+    public database db;
+    public HashMap<String, Benutzer> alleBenutzer = new HashMap<String, Benutzer>();
+    public HashMap<String, Gebiet> alleGebiete = new HashMap<String, Gebiet>();
 
     @Override
     public void onDisable() {
+        for (Map.Entry<String, Benutzer> e : this.alleBenutzer.entrySet()) {
+            e.getValue().save();
+        }
         System.out.println("[TN-CC] deaktiviert");
     }
 
     @Override
     public void onEnable() {
-        System.out.println("[TN-CC] aktiviert");
-        super.onEnable();
-        //Module laden
-        this.modBeruf = new me.tekkitnerds.controlcenter.beruf.main(this.getDB());
-        this.modGebiet = new me.tekkitnerds.controlcenter.gebiet.main(this.getDB());
-    }
+        this.db = new database("localhost", 3306, "bukkit-plugin", "KJmatKABG9feCbDX", "bukkit-plugin");
 
-    @EventHandler
-    public void onPlayerJoin() {
-        super.onPlayerJoin();
-        ((me.tekkitnerds.controlcenter.beruf.main) this.modBeruf).onPlayerJoin();
-        ((me.tekkitnerds.controlcenter.gebiet.main) this.modGebiet).onPlayerJoin();
-        //weitere Module für diesen Eventhandler
-    }
+        //Commands registrieren
+        this.getCommand("regelbuch").setExecutor(new RegelbuchCommand(this));
+        this.getCommand("gebiet").setExecutor(new GebietCommand(this));
+        this.getCommand("benutzer").setExecutor(new BenutzerCommand(this));
 
-    @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String cmdLabel, String[] args) {
-        boolean erfolg = false;
-        if (cmd.getName().equalsIgnoreCase("cc")) {
-            if (args.length > 0) {
-                if (args[0].equalsIgnoreCase("beruf")) {
-                    return this.modBeruf.onCommand(sender, cmd, cmdLabel, args);
-                } else if (args[0].equalsIgnoreCase("gebiet")) {
-                    return this.modGebiet.onCommand(sender, cmd, cmdLabel, args);
-                } else {
-                    return false;
-                }
-            } 
-        } else if (cmd.getName().equalsIgnoreCase("regelbuch")) {
-            new regelbuch(sender);
+        PluginManager pm = this.getServer().getPluginManager();
+        pm.registerEvents(new JoinListener(this), this);
+        pm.registerEvents(new PlayerMoveListener(this), this);
+
+        Player[] pl = this.getServer().getOnlinePlayers();
+        for (int i = 0; i < pl.length; i++) {
+            String name = pl[i].getName().toLowerCase();
+            Benutzer nb = new Benutzer(this, name);
+            nb.load();
+            this.alleBenutzer.put(name, nb);
         }
-        return erfolg;
+
+        System.out.println("[TN-CC] aktiviert");
+    }
+
+    protected database getDB() {
+        return this.db;
     }
 }

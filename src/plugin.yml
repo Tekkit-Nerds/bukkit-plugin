@@ -4,9 +4,12 @@ main: me.tekkitnerds.controlcenter.controlcenter
 author: Niklas Kamenisch & Aaron Braun
 website: tekkit-nerds.net
 commands:
-     cc:
-          description: Befehle für unser Plugin
+     gebiet:
+          description: Befehl für Gebiete
           usage: /<command>
      regelbuch:
           description: Unser Regelbuch
+          usage: /<command>
+     benutzer:
+          description: Diverse Benutzer befehle
           usage: /<command>
