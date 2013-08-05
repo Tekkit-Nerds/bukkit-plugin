@@ -2,8 +2,10 @@ package me.tekkitnerds.controlcenter.gebiet;
 // @author Niklas
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import me.tekkitnerds.controlcenter.benutzer.Benutzer;
 import me.tekkitnerds.controlcenter.controlcenter;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 
 public class Gebiet {
 
@@ -69,10 +71,35 @@ public class Gebiet {
         return true;
     } // Ende isInside
 
+    public void onLeave(Benutzer b, Player p) { //todo
+        p.sendMessage("Du verlässt das Gebiet: " + this.name);
+    }
+
+    public void onEnter(Benutzer b, Player p) { //todo
+        p.sendMessage("Du betrittst das Gebiet: " + this.name);
+    }
+
+    public boolean checkEnterAllowed(Benutzer b, Player p) { //todo
+        if (b.isOp()) {return true;}
+        return true;
+    }
+
+    public boolean checkLeaveAllowed(Benutzer b, Player p) { //todo
+        if (b.isOp()) {return true;}
+        return true;
+    }
+    
+    public boolean checkPlaceAllowed(Benutzer b, Player p) {
+        if (b.isOp()){return true;}
+        return true;
+    }
+
+    
+    
     public void save() {
         try {
             ResultSet erg = this.plugin.db.Query("SELECT * FROM `tncc_gebiete` WHERE `gebiet_name` = '" + this.name + "'");
-            if (erg.absolute(0)) {
+            if (erg.next()) {
                 this.plugin.db.Query("UPDATE `tncc_gebiete`"
                         + "             SET `gebiet_min_x` = '" + this.minX + "',"
                         + "                 `gebiet_min_y` = '" + this.minY + "',"
@@ -81,7 +108,7 @@ public class Gebiet {
                         + "                 `gebiet_max_y` = '" + this.maxY + "',"
                         + "                 `gebiet_max_z` = '" + this.maxZ + "',"
                         + "                 `gebiet_world` = '" + this.world + "',"
-                        + "             WHERE `gebiet_name` = '" + this.name + "'");
+                        + "             WHERE `gebiet_name` = '" + this.name + "'", true);
             } else {
                 this.plugin.db.Query("INSERT INTO `tncc_gebiete`"
                         + "             SET `gebiet_min_x` = '" + this.minX + "',"
@@ -91,7 +118,7 @@ public class Gebiet {
                         + "                 `gebiet_max_y` = '" + this.maxY + "',"
                         + "                 `gebiet_max_z` = '" + this.maxZ + "',"
                         + "                 `gebiet_world` = '" + this.world + "',"
-                        + "                 `gebiet_name` = '" + this.name + "'");
+                        + "                 `gebiet_name` = '" + this.name + "'", true);
             }
         } catch (Exception e) {
         }

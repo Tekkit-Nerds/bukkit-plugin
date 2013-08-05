@@ -6,8 +6,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.bukkit.Bukkit;
 
 public class database {
 
@@ -46,7 +45,7 @@ public class database {
         try {
             Class.forName(DRIVER);
             String url = "jdbc:mysql://" + this.host + ":" + this.port + "/" + this.database;
-            conn = DriverManager.getConnection(url, this.user, this.passwort);
+            this.conn = DriverManager.getConnection(url, this.user, this.passwort);
             this.isConnected = true;
         } catch (Exception e) {
             this.isConnected = false;
@@ -56,17 +55,27 @@ public class database {
     private void disconnect() {
         try {
             this.isConnected = false;
-            conn.close();
+            this.conn.close();
         } catch (SQLException ex) {
         }
     }
 
     public ResultSet Query(String SQLquery) {
+        return Query (SQLquery, false);
+    }
+    
+    public ResultSet Query(String SQLquery, boolean isInsert) {
         try {
-            Statement stmt = conn.createStatement();
-            return stmt.executeQuery(SQLquery);
+            if (isInsert){
+                Statement stmt = this.conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+                stmt.executeUpdate(SQLquery);
+                return null;
+            } else {
+                Statement stmt = this.conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+                return stmt.executeQuery(SQLquery);
+            }
         } catch (SQLException ex) {
-            Logger.getLogger(database.class.getName()).log(Level.SEVERE, null, ex);
+            Bukkit.getServer().broadcastMessage(ex.toString());
             return null;
         }
     }

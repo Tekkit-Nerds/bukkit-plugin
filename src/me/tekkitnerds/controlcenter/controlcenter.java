@@ -8,6 +8,8 @@ import me.tekkitnerds.controlcenter.benutzer.BenutzerCommand;
 import me.tekkitnerds.controlcenter.gebiet.Gebiet;
 import me.tekkitnerds.controlcenter.regelbuch.RegelbuchCommand;
 import me.tekkitnerds.controlcenter.gebiet.GebietCommand;
+import me.tekkitnerds.controlcenter.listener.BlockBreakListener;
+import me.tekkitnerds.controlcenter.listener.BlockPlaceListener;
 import me.tekkitnerds.controlcenter.listener.PlayerMoveListener;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
@@ -39,6 +41,8 @@ public class controlcenter extends JavaPlugin {
         PluginManager pm = this.getServer().getPluginManager();
         pm.registerEvents(new JoinListener(this), this);
         pm.registerEvents(new PlayerMoveListener(this), this);
+        pm.registerEvents(new BlockBreakListener(this), this);
+        pm.registerEvents(new BlockPlaceListener(this), this);
 
         Player[] pl = this.getServer().getOnlinePlayers();
         for (int i = 0; i < pl.length; i++) {

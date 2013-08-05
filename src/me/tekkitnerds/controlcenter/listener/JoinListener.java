@@ -26,9 +26,13 @@ public class JoinListener implements Listener {
             if (!this.plugin.alleBenutzer.keySet().contains(playerName)){
                 // User aus der DB holen
                 ResultSet erg = this.plugin.db.Query("SELECT * FROM `tncc_benutzer` WHERE `benutzer_name` = '" + playerName + "'");
-                erg.first();
-                if (erg.absolute(0)) {
-                    sp = new Benutzer(this.plugin, erg.getString("benutzer_name").toString(), erg.getInt("benutzer_xp"), erg.getInt("benutzer_coins"), erg.getString("benutzer_pw").toString());
+
+                if (erg.next()) {
+                    String pw = "";
+                    if (erg.getString("benutzer_pw") != null){
+                        pw = erg.getString("benutzer_pw").toString();
+                    }
+                    sp = new Benutzer(this.plugin, erg.getString("benutzer_name").toString(), erg.getInt("benutzer_xp"), erg.getInt("benutzer_coins"), pw, false);
                 } else {
                     sp = new Benutzer(this.plugin, playerName);
                     sp.save();
