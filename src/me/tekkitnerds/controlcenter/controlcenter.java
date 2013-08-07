@@ -5,12 +5,16 @@ import me.tekkitnerds.controlcenter.listener.JoinListener;
 import java.util.HashMap;
 import java.util.Map;
 import me.tekkitnerds.controlcenter.benutzer.BenutzerCommand;
+import me.tekkitnerds.controlcenter.beruf.BerufCommand;
 import me.tekkitnerds.controlcenter.gebiet.Gebiet;
 import me.tekkitnerds.controlcenter.regelbuch.RegelbuchCommand;
 import me.tekkitnerds.controlcenter.gebiet.GebietCommand;
 import me.tekkitnerds.controlcenter.listener.BlockBreakListener;
 import me.tekkitnerds.controlcenter.listener.BlockPlaceListener;
+import me.tekkitnerds.controlcenter.listener.PlayerInteractListener;
 import me.tekkitnerds.controlcenter.listener.PlayerMoveListener;
+import me.tekkitnerds.controlcenter.listener.VehicleMoveListener;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -20,6 +24,7 @@ public class controlcenter extends JavaPlugin {
     public database db;
     public HashMap<String, Benutzer> alleBenutzer = new HashMap<String, Benutzer>();
     public HashMap<String, Gebiet> alleGebiete = new HashMap<String, Gebiet>();
+    public HashMap<String, Location> playerLoc1, playerLoc2 = new HashMap<String, Location>();
 
     @Override
     public void onDisable() {
@@ -37,12 +42,15 @@ public class controlcenter extends JavaPlugin {
         this.getCommand("regelbuch").setExecutor(new RegelbuchCommand(this));
         this.getCommand("gebiet").setExecutor(new GebietCommand(this));
         this.getCommand("benutzer").setExecutor(new BenutzerCommand(this));
+        this.getCommand("beruf").setExecutor(new BerufCommand(this));
 
         PluginManager pm = this.getServer().getPluginManager();
         pm.registerEvents(new JoinListener(this), this);
         pm.registerEvents(new PlayerMoveListener(this), this);
         pm.registerEvents(new BlockBreakListener(this), this);
         pm.registerEvents(new BlockPlaceListener(this), this);
+        pm.registerEvents(new PlayerInteractListener(this), this);
+        pm.registerEvents(new VehicleMoveListener(this), this);
 
         Player[] pl = this.getServer().getOnlinePlayers();
         for (int i = 0; i < pl.length; i++) {

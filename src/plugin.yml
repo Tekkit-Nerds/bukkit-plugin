@@ -11,5 +11,8 @@ commands:
           description: Unser Regelbuch
           usage: /<command>
      benutzer:
-          description: Diverse Benutzer befehle
+          description: Diverse Benutzer Befehle
+          usage: /<command>
+     beruf:
+          description: Diverse Beruf Befehle
           usage: /<command>

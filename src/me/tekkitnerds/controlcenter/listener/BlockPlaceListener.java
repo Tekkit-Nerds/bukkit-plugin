@@ -10,13 +10,13 @@ public class BlockPlaceListener implements Listener {
     private controlcenter plugin;
 
     public BlockPlaceListener(controlcenter pPlugin) {
-        this.plugin =  plugin;
+        this.plugin =  pPlugin;
     }
 
     @EventHandler
     public void onBlockPlace (BlockPlaceEvent e){
-         //darf man hier abbauen?
-        //was gibt es fürs abbauen an erfahrung?       
+         //darf man hier place?
+        //was gibt es fürs place an erfahrung?       
         //Diverse Blöcke verbieten (TNT)
         e.setCancelled(true);
     }

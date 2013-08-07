@@ -4,8 +4,8 @@ package me.tekkitnerds.controlcenter.benutzer;
 import java.security.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.HashMap;
+import me.tekkitnerds.controlcenter.beruf.Beruf;
 import me.tekkitnerds.controlcenter.controlcenter;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -16,6 +16,25 @@ public class Benutzer {
     private String name, pw;
     private int BXP, coins;
     private controlcenter plugin;
+    private HashMap<String, Beruf> berufe = new HashMap<String, Beruf>();
+
+    public HashMap getBerufe() {
+        return this.berufe;
+    }
+
+    public Beruf getBeruf(String berufName) {
+        return this.berufe.get(berufName);
+    }
+
+    public void setBeruf(Beruf newBeruf) {
+        if (!this.berufe.containsKey(newBeruf.getName())){
+            this.berufe.put(newBeruf.getName(), newBeruf);
+        }
+    }
+    
+    public void loadBerufe (){
+        
+    }
 
     public Benutzer(controlcenter pPlugin, String pName) {
         this.plugin = pPlugin;
@@ -62,6 +81,7 @@ public class Benutzer {
                     this.pw = erg.getString("benutzer_pw").toString();
                 }
             }
+            erg.close();
         } catch (SQLException ex) {
         }
     }
@@ -85,6 +105,7 @@ public class Benutzer {
                         + "                 `benutzer_update` = NOW(),"
                         + "                 `benutzer_name` = '" + this.name + "'", true);
             }
+            erg.close();
         } catch (Exception e) {
             this.plugin.getServer().broadcastMessage(e.toString());
         }
@@ -102,7 +123,7 @@ public class Benutzer {
             md5.reset();
             md5.update(pw.getBytes());
             byte[] result = md5.digest();
-            StringBuffer hexString = new StringBuffer();
+            StringBuilder hexString = new StringBuilder();
             for (int i = 0; i < result.length; i++) {
                 hexString.append(Integer.toHexString(0xFF & result[i]));
             }
