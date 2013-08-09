@@ -16,7 +16,7 @@ public class BlockBreakListener implements Listener {
     public void onBlockBreak(BlockBreakEvent e) {//todo
         //darf man hier abbauen?
         //was gibt es fürs abbauen an erfahrung?        
-        e.setCancelled(true);
+        //e.setCancelled(true);
     }
     
 }

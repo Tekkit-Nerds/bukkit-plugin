@@ -18,7 +18,7 @@ public class BlockPlaceListener implements Listener {
          //darf man hier place?
         //was gibt es fürs place an erfahrung?       
         //Diverse Blöcke verbieten (TNT)
-        e.setCancelled(true);
+        //e.setCancelled(true);
     }
     
 }

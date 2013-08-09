@@ -16,3 +16,6 @@ commands:
      beruf:
           description: Diverse Beruf Befehle
           usage: /<command>
+     set:
+          description: Diverse Set Befehle
+          usage: /<command>

@@ -9,11 +9,11 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-public class JoinListener implements Listener {
+public class PlayerJoinListener implements Listener {
 
     private controlcenter plugin;
 
-    public JoinListener(controlcenter pPlugin) {
+    public PlayerJoinListener(controlcenter pPlugin) {
         this.plugin = pPlugin;
         this.plugin.getServer().broadcastMessage("test");
     }
@@ -26,7 +26,6 @@ public class JoinListener implements Listener {
             if (!this.plugin.alleBenutzer.keySet().contains(playerName)){
                 // User aus der DB holen
                 ResultSet erg = this.plugin.db.Query("SELECT * FROM `tncc_benutzer` WHERE `benutzer_name` = '" + playerName + "'");
-
                 if (erg.next()) {
                     String pw = "";
                     if (erg.getString("benutzer_pw") != null){
@@ -45,6 +44,14 @@ public class JoinListener implements Listener {
             event.getPlayer().sendMessage("Hallo " + playerName);
             event.getPlayer().sendMessage("Du hast " + sp.getBxp() + " Erfahrungspunkte");
             event.getPlayer().sendMessage("und " + sp.getCoins() + " Coins");
+            if (this.plugin.configStrings.containsKey("wellcomeMessage")){
+                if (this.plugin.configStrings.get("wellcomeMessage").length() > 0){
+                    String msg = this.plugin.configStrings.get("wellcomeMessage");
+                    msg = msg.replace("%P%", event.getPlayer().getName());
+                    event.getPlayer().sendMessage(msg);
+                }
+            }
+            
 
         } catch (SQLException ex) {
         }
