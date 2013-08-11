@@ -25,11 +25,12 @@ public class PlayerInteractListener implements Listener {
         Material itemInHand = p.getItemInHand().getType();
         if (aktion.equals(Action.RIGHT_CLICK_BLOCK)){
             Location pos = e.getClickedBlock().getLocation();
-            if (itemInHand.equals(Material.DIAMOND_AXE)){  // Positionen Setzen
+            if (itemInHand.toString().equals(Material.DIAMOND_AXE.toString())){  // Positionen Setzen
                 if (this.plugin.playerLoc2.containsKey(name)){
                     this.plugin.playerLoc2.remove(name);
                 } 
                 this.plugin.playerLoc2.put(name, pos);
+                e.setCancelled(true);
                 if (this.plugin.playerLoc1.containsKey(name) && this.plugin.playerLoc1.get(name).getWorld().equals(pos.getWorld())){
                     Location otherPos = this.plugin.playerLoc1.get(name);
                     double distance = otherPos.distanceSquared(pos);
@@ -42,11 +43,12 @@ public class PlayerInteractListener implements Listener {
             
         } else if (aktion.equals(Action.LEFT_CLICK_BLOCK)){
             Location pos = e.getClickedBlock().getLocation();
-            if (itemInHand.equals(Material.DIAMOND_AXE)){ // Positionen Setzen
+            if (itemInHand.toString().equals(Material.DIAMOND_AXE.toString())){ // Positionen Setzen
                 if (this.plugin.playerLoc1.containsKey(name)){
                     this.plugin.playerLoc1.remove(name);
                 } 
                 this.plugin.playerLoc1.put(name, pos);
+                e.setCancelled(true);
                 if (this.plugin.playerLoc2.containsKey(name) && this.plugin.playerLoc2.get(name).getWorld().equals(pos.getWorld())){
                     Location otherPos = this.plugin.playerLoc2.get(name);
                     double distance = otherPos.distanceSquared(pos);

@@ -27,7 +27,8 @@ public class controlcenter extends JavaPlugin {
     public Scheduler scheduler;
     public HashMap<String, Benutzer> alleBenutzer = new HashMap<String, Benutzer>();
     public HashMap<String, Gebiet> alleGebiete = new HashMap<String, Gebiet>();
-    public HashMap<String, Location> playerLoc1, playerLoc2 = new HashMap<String, Location>();
+    public HashMap<String, Location> playerLoc1 = new HashMap<String, Location>();
+    public HashMap<String, Location> playerLoc2 = new HashMap<String, Location>();
     public HashMap<String, String> configStrings = new HashMap<String, String>();
 
     @Override
